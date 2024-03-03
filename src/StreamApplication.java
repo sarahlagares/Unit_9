@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -8,24 +10,26 @@ import java.util.stream.IntStream;
 public class StreamApplication {
 
 	public static void main(String[] args) {
-		List<List<Integer>> listOfNumbersList = new ArrayList<>();
-		listOfNumbersList.add(Arrays.asList(1,2,3)); 
-		listOfNumbersList.add(Arrays.asList(2,3,4)); 
-		listOfNumbersList.add(Arrays.asList(3,4,5)); 
-		listOfNumbersList.add(Arrays.asList(4,5,6)); 
 		
-		long sum = listOfNumbersList.stream()
-								                        .flatMap(x -> x.stream())
-								                        .mapToInt(x -> x.intValue())
-		                                                .sum();
-		System.out.println(sum);
-		
-		
+		example3();
+//		List<List<Integer>> listOfNumbersList = new ArrayList<>();
+//		listOfNumbersList.add(Arrays.asList(1,2,3)); 
+//		listOfNumbersList.add(Arrays.asList(2,3,4)); 
+//		listOfNumbersList.add(Arrays.asList(3,4,5)); 
+//		listOfNumbersList.add(Arrays.asList(4,5,6)); 
+//		
+//		long sum = listOfNumbersList.stream()
+//								                        .flatMap(x -> x.stream())
+//								                        .mapToInt(x -> x.intValue())
+//		                                                .sum();
+//		System.out.println(sum);
+//		
+//		
 //		example2();
 //		example1();
 	}
 
-	private static void example2() {
+	private static void example3() {
 		List <Car> cars = new ArrayList<>();
 		
 		cars.add(new Car("Tesla", "Model S", 2019));
@@ -35,6 +39,19 @@ public class StreamApplication {
 		cars.add(new Car("Ford", "F150", 2017));
 		cars.add(new Car("Toyota", "Corolla", 1997));
 		cars.add(new Car("Toyota", "Celica", 2002));
+		
+		// Tesla -> ["Model S 2019", "Model S 2018", "Model X 2016" "Model 3 2019"]
+		// Ford -> ["F150 2017"]
+		// Toyota -> ["Corolla 1997", "Celica 2002"]
+		
+		Map<String, List<Car>> groupByBrand = cars.stream()
+		      .collect(Collectors.groupingBy((car) -> car.getBrand()));
+		System.out.println(groupByBrand);
+		
+		//How to iterate thru a hashmap by entryset
+		
+		Set<Entry<String, List<Car>>> entrySet = groupByBrand.entrySet();
+		System.out.println(entrySet);
 		
 		List<String> models = cars.stream()
 		                                           .map(car -> car.getModel())
@@ -46,10 +63,10 @@ public class StreamApplication {
 				    				    .filter(brand -> brand.startsWith("T"))
 				    					.collect(Collectors.joining(" \n"));
 		
-		models.stream()
-					.forEach(model -> System.out.println(model));
-		System.out.println("-------");
-		System.out.println(brands);
+//		models.stream()
+//					.forEach(model -> System.out.println(model));
+//		System.out.println("-------");
+//		System.out.println(brands);
 		
 //		cars.stream()
 //			  .forEach(car -> System.out.println(car));
